@@ -94,6 +94,21 @@ Agent:
 Project Root
 ├── README.md                                    # High-level overview, architecture, setup
 ├── CLAUDE.md                                    # Development conventions, deployment workflow
+├── DECISIONS.md                                 # Architecture and business logic decisions
+├── CHANGELOG.md                                 # Version history (Keep a Changelog format)
+├── CONTRIBUTING.md                              # Contribution guidelines
+│
+├── .claude/                                     # Claude Code configuration
+│   ├── commands/                                # Slash commands (/task-plan, /decision, etc.)
+│   │   ├── task-plan.md
+│   │   ├── decision.md
+│   │   ├── changelog.md
+│   │   └── release.md
+│   └── skills/                                  # Skills supporting commands
+│       ├── task-plan-skill/SKILL.md
+│       ├── decision-skill/SKILL.md
+│       ├── changelog-skill/SKILL.md
+│       └── release-skill/SKILL.md
 │
 ├── [SERVICE_FOLDER]/
 │   ├── [service-name]/                          # Service (owns its docs)
@@ -113,10 +128,12 @@ Project Root
 │   └── README.md                                # Build and deployment scripts
 │
 ├── _tasks/                                      # Task planning folder (AI assistant)
-│   └── {NN}-{task-name}/                        # Individual task folders
-│       ├── 01-task.md                           # Task description and requirements
-│       ├── 02-plan.md                           # Implementation plan
-│       └── 03-*.md                              # Additional docs (design, notes, etc.)
+│   ├── 00-example/                              # Example task folder (delete or keep as reference)
+│   ├── {NN}-{task-name}/                        # Individual task folders
+│   │   ├── 01-task.md                           # Task description and requirements
+│   │   ├── 02-plan.md                           # Implementation plan
+│   │   └── 03-*.md                              # Additional docs (design, notes, etc.)
+│   └── _TECH_DEBT/                              # Technical debt tracking
 │
 └── .env.example                                 # Environment variables template
 ```
@@ -180,6 +197,52 @@ When implementing a change, follow the **locality principle** and use this check
 ## Task Planning Folder (`_tasks/`)
 
 Complex features and multi-session work go in `_tasks/`. See [`_tasks/CLAUDE.md`](_tasks/CLAUDE.md) for detailed conventions (folder structure, file naming, lifecycle).
+
+See [`_tasks/00-example/`](_tasks/00-example/) for a sample task folder showing the pattern.
+
+## Decisions Log (`DECISIONS.md`)
+
+Record architectural (ADR) and business logic (BIZ) decisions in [`DECISIONS.md`](DECISIONS.md).
+
+**When to record decisions:**
+- Choosing between frameworks/libraries
+- Defining business rules or calculations
+- Making architectural trade-offs
+- Establishing coding patterns
+- Resolving technical debates
+
+**Key principle:** Focus on the "why" - reasoning is the most valuable part of a decision record.
+
+Use `/decision` command or invoke the decision skill.
+
+## Changelog (`CHANGELOG.md`)
+
+Update [`CHANGELOG.md`](CHANGELOG.md) **immediately** after completing work. Don't batch changes or wait until release.
+
+**Workflow:**
+1. Complete feature/fix
+2. Add entry under `[Unreleased]` in the appropriate category (Added, Changed, Fixed, Removed)
+3. Commit changelog update with the code changes
+
+**Writing tips:**
+- Be concise (one line per change)
+- Focus on user-visible impact, not implementation details
+- Use consistent terminology
+
+Use `/changelog` command or invoke the changelog skill.
+
+## Slash Commands
+
+This template includes Claude Code slash commands for common workflows:
+
+| Command | Purpose |
+|---------|---------|
+| `/task-plan` | Plan a new feature with brainstorming |
+| `/decision` | Record an architectural or business decision |
+| `/changelog` | Update changelog after completing work |
+| `/release` | Create a new version release |
+
+Commands are defined in `.claude/commands/` with supporting skills in `.claude/skills/`.
 
 ## File Encoding Standards
 

@@ -15,18 +15,30 @@ This template works best when combined with **Superpowers skills** - a collectio
 
 ## Getting Started
 
-1. Copy `CLAUDE.md` to your project root
-2. Copy the `_tasks/` folder to your project root
-3. Search for `[PLACEHOLDER]` markers and replace with your project specifics
-4. Update the documentation hierarchy diagram to match your folder structure
+1. Copy all template files to your project root:
+   - `CLAUDE.md` - Main AI guidance
+   - `DECISIONS.md` - Decision log
+   - `CHANGELOG.md` - Version history
+   - `CONTRIBUTING.md` - Contribution guidelines
+   - `_tasks/` folder - Task planning
+   - `.claude/` folder - Commands and skills
+2. Search for `[PLACEHOLDER]` markers and replace with your project specifics
+3. Update the documentation hierarchy diagram in `CLAUDE.md` to match your folder structure
+4. Delete or keep `_tasks/00-example/` as a reference
 
 ## File Overview
 
 | File | Purpose |
 |------|---------|
 | `CLAUDE.md` | Main AI guidance - documentation workflow, project structure, conventions |
+| `DECISIONS.md` | Architecture Decision Records (ADRs) and business logic decisions |
+| `CHANGELOG.md` | Version history using Keep a Changelog format |
+| `CONTRIBUTING.md` | Contribution guidelines, TDD workflow, PR process |
 | `_tasks/CLAUDE.md` | Task planning structure for complex features |
 | `_tasks/_TECH_DEBT/CLAUDE.md` | Technical debt tracking guidelines |
+| `_tasks/00-example/` | Example task folder showing the pattern |
+| `.claude/commands/` | Slash commands for common workflows |
+| `.claude/skills/` | Skills that power the slash commands |
 
 ## Core Concepts
 
@@ -59,6 +71,23 @@ _tasks/
 │   ├── 02-plan.md      # Implementation plan
 │   └── 03-design.md    # Architecture decisions
 ```
+
+## Slash Commands
+
+This template includes Claude Code slash commands for common workflows:
+
+| Command | Description |
+|---------|-------------|
+| `/task-plan` | Plan features with brainstorming before coding |
+| `/decision` | Record architectural and business decisions |
+| `/changelog` | Update changelog after completing work |
+| `/release` | Create versioned releases |
+
+Commands are defined in `.claude/commands/` with supporting skills in `.claude/skills/`.
+
+### Why Skills Have `-skill` Suffix
+
+Skill folder names use a `-skill` suffix (e.g., `task-plan-skill/`) to work around a Claude Code bug where skill folder names matching command names can cause conflicts. The suffix ensures clean separation between commands and their supporting skills.
 
 ## Customization Guide
 
