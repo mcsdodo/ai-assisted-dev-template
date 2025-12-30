@@ -19,8 +19,19 @@ _tasks/
 
 ## File Naming
 
-- **Folders**: `{NN}-{descriptive-name}` - Check existing folders for next number
+- **Folders**: `{NN}-{descriptive-name}` - Use next sequential number
 - **Files**: `{NN}-{name}.md` format (e.g., `01-task.md`, `02-plan.md`)
+
+### Finding the Next Folder Number
+
+List existing folders and use the next number:
+```bash
+ls _tasks/
+# Shows: 00-example, 01-auth-feature, 02-api-refactor
+# → Use 03 for your new folder
+```
+
+If no numbered folders exist (only `00-example`), start with `01`.
 
 | File | Purpose |
 |------|---------|

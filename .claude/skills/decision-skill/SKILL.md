@@ -110,3 +110,8 @@ If a decision creates technical debt, reference it:
 ```markdown
 **Related:** Creates `_TECH_DEBT/05-frontend-calculation-removal.md`
 ```
+
+## Related Skills
+
+- **task-plan-skill** - Decisions often emerge during feature planning
+- **changelog-skill** - Significant decisions may warrant changelog entries

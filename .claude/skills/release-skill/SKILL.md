@@ -27,7 +27,6 @@ Before releasing:
 
 Find current version in your version file(s):
 
-<!-- CUSTOMIZE: Replace with your actual version file -->
 ```bash
 # Example for Node.js
 cat package.json | grep '"version"'
@@ -53,7 +52,6 @@ Ask user if unclear: "This release includes [summary]. Should this be a patch, m
 
 Update version string in ALL locations:
 
-<!-- CUSTOMIZE: List your version file locations -->
 - `[VERSION_FILE_1]`
 - `[VERSION_FILE_2]`
 
@@ -88,7 +86,6 @@ To:
 
 Run your build and test commands:
 
-<!-- CUSTOMIZE: Replace with your commands -->
 ```bash
 [BUILD_COMMAND]
 [TEST_COMMAND]
@@ -142,3 +139,8 @@ git reset --hard HEAD~1
 ```
 
 If already pushed, coordinate with team before any rollback actions.
+
+## Related Skills
+
+- **changelog-skill** - Maintains the `[Unreleased]` section this skill transforms
+- **task-plan-skill** - Releases often follow completion of planned tasks

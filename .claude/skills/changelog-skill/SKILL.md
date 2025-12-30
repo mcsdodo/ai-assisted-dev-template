@@ -115,3 +115,9 @@ When running `/release`:
 1. The `[Unreleased]` section becomes a versioned section
 2. A new empty `[Unreleased]` section is created
 3. The release workflow handles the transformation
+
+## Related Skills
+
+- **release-skill** - Transforms `[Unreleased]` into versioned releases
+- **decision-skill** - Significant decisions may warrant changelog entries
+- **task-plan-skill** - Completed tasks should trigger changelog updates

@@ -121,3 +121,8 @@ This preserves design rationale in version control before code changes begin.
 - Each step needs verification criteria
 - Commit planning docs before coding
 - Superpowers skills are optional but recommended if available
+
+## Related Skills
+
+- **decision-skill** - Record architectural decisions made during planning
+- **changelog-skill** - Update changelog when task is complete

@@ -6,7 +6,7 @@
 
 ---
 
-This is an example task file showing the recommended structure. Delete this folder when starting your own project, or keep it as a reference.
+This is an example task file showing the recommended structure.
 
 ---
 

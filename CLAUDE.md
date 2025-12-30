@@ -2,6 +2,8 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
+> **For agents setting up from template:** `[PLACEHOLDER]` markers indicate values to adapt based on the target project's structure. Analyze the project and replace with appropriate values.
+
 ## Core Principle: Documentation-Driven Development
 
 **MANDATORY WORKFLOW FOR ALL CODE CHANGES:**
@@ -19,8 +21,6 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ## Project Overview
 
 [PROJECT_DESCRIPTION]
-
-<!-- CUSTOMIZE: Add 2-3 sentences describing your project, its purpose, and key technologies -->
 
 ## Documentation Policy
 
@@ -60,31 +60,18 @@ Agent:
 
 ### When to Update Documentation
 
-**You MUST update documentation whenever you make ANY of the following changes:**
+**You MUST update documentation whenever you change code.** Apply the locality principle:
 
-1. **Service/Component Changes**
-   - **Local First**: Update the service's own README
-   - **Root Second**: Update root `README.md` only if it affects architecture overview or usage
-   - **Optionally**: Update `CLAUDE.md` if changes affect agent workflows (e.g., new CLI commands, debugging patterns, common operations)
+| Change Type | Update First (Local) | Update Second (Root) |
+|-------------|---------------------|---------------------|
+| Service/Component | Service's own README | Root README if architecture changes |
+| Infrastructure | `[INFRASTRUCTURE_FOLDER]/README.md` | CLAUDE.md if workflow changes |
+| Deployment | `[DEPLOYMENT_FOLDER]/README.md` | CLAUDE.md if workflow changes |
+| Testing | Service test docs | Service README if strategy changes |
+| Configuration | Config-specific docs | Root docs if affects setup |
+| Cross-Cutting | Root docs directly | - |
 
-2. **Infrastructure Changes**
-   - **Local First**: Update `[INFRASTRUCTURE_FOLDER]/README.md` for infrastructure-specific changes
-   - **Root Second**: Update root `CLAUDE.md` only if deployment workflow changes
-
-3. **Deployment Changes**
-   - **Local First**: Update `[DEPLOYMENT_FOLDER]/README.md` for deployment script changes
-   - **Root Second**: Update `CLAUDE.md` if overall deployment workflow changes
-
-4. **Testing Changes**
-   - **Local First**: Update service-specific test docs
-   - **Root Second**: Update service README only if test strategy changes
-
-5. **Configuration Changes**
-   - **Local First**: Update config-specific docs near the config files
-   - **Root Second**: Update root docs only if it affects setup/usage
-
-6. **Cross-Cutting/Architecture Changes**
-   - **Update root docs** when changes affect multiple services or overall architecture
+**Exception for CLAUDE.md**: Also update if changes affect agent workflows (new CLI commands, debugging patterns, common operations).
 
 ### Documentation Structure and Hierarchy
 
@@ -96,7 +83,6 @@ Project Root
 ├── CLAUDE.md                                    # Development conventions, deployment workflow
 ├── DECISIONS.md                                 # Architecture and business logic decisions
 ├── CHANGELOG.md                                 # Version history (Keep a Changelog format)
-├── CONTRIBUTING.md                              # Contribution guidelines
 │
 ├── .claude/                                     # Claude Code configuration
 │   ├── commands/                                # Slash commands (/task-plan, /decision, etc.)
@@ -258,15 +244,7 @@ This is especially critical for:
 - Dockerfiles
 - Any file executed in containers
 
-<!--
-================================================================================
-CUSTOMIZE: Add project-specific sections below
-================================================================================
--->
-
 ## Architecture
-
-<!-- CUSTOMIZE: Describe your project architecture -->
 
 - **Services**: [List your services/components]
 - **Database**: [Your database technology]
@@ -274,9 +252,6 @@ CUSTOMIZE: Add project-specific sections below
 
 ## Common Development Commands
 
-<!-- CUSTOMIZE: Add your common commands -->
-
-### [Service Name]
 ```bash
 # Start development server
 [YOUR_COMMAND_HERE]
@@ -288,37 +263,12 @@ CUSTOMIZE: Add project-specific sections below
 [YOUR_COMMAND_HERE]
 ```
 
-### Docker / Local Development
-```bash
-# Start all services
-[YOUR_COMMAND_HERE]
-
-# View logs
-[YOUR_COMMAND_HERE]
-
-# Rebuild after changes
-[YOUR_COMMAND_HERE]
-```
-
 ## Environment Variables
 
-<!-- CUSTOMIZE: List your environment variables -->
-
-- `[VAR_NAME]`: Description of what this variable controls
 - `[VAR_NAME]`: Description of what this variable controls
 
 ## Code Conventions
 
-<!-- CUSTOMIZE: Add your code conventions -->
-
-### [Language/Framework]
 - Convention 1
 - Convention 2
 - Convention 3
-
-## Important Files
-
-<!-- CUSTOMIZE: List key files in your project -->
-
-- `/path/to/file`: Description of what this file does
-- `/path/to/file`: Description of what this file does
