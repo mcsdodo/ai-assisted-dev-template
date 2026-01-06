@@ -50,6 +50,14 @@ These exist to show patterns - understand them, then delete:
 | `_tasks/00-example/02-plan.md` | Example implementation plan |
 | `_tasks/_TECH_DEBT/README.md` | Example tech debt index table |
 
+### Template Maintenance (Skip)
+
+These are for maintaining the template itself - **do not copy to projects**:
+
+| File | Purpose |
+|------|---------|
+| `_template/` | Template development docs, sync analyses, workflows |
+
 ## Core Concepts
 
 - **Documentation-Driven Development**: Read docs → Code → Update docs
