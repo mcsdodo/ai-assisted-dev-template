@@ -1,113 +1,221 @@
 ---
 name: plan-review-skill
-description: Use to review plans and designs before implementation
+description: Use to review plans, designs, or specifications for completeness and feasibility
 ---
 
-# Iterative Plan Review
+# Plan Review Skill
 
-Review plans for completeness, feasibility, and clarity with up to 4 iterations.
+Two-phase review: First analyze and document findings, then apply approved changes.
 
-## When to Apply
+**Preset Configuration:**
+- Focus: Plan completeness, feasibility, clarity
+- Quality Gate: No new findings for 1 iteration (review comprehensive)
+- Reviewer Type: Plan Auditor
+- Max Iterations: 4
 
-- Before starting implementation
-- After creating a task plan
-- When reviewing design documents
-- Before complex refactoring
+## When to Use
 
-## Requirements
+- Reviewing implementation plans before coding
+- Checking design documents for gaps
+- Validating task specifications
+- Assessing feasibility of proposed approaches
 
-Before starting:
-1. **Target**: Plan or design document path
-2. **Reference**: (Optional) Requirements or constraints
+## Required Information
 
-## Quality Gate
+1. **Target** - path to plan/design document (e.g., `_tasks/15-feature/02-plan.md`)
+2. **Reference** (optional) - requirements or constraints to compare against
 
-Exit when: **No Critical/Important issues remain**
+---
 
-## Review Dimensions
+## Phase 1: Review (Findings Only)
 
-| Dimension | Questions |
-|-----------|-----------|
-| **Completeness** | All requirements addressed? Tasks identified? Edge cases considered? |
-| **Feasibility** | Tasks achievable? Hidden complexities? Dependencies identified? |
-| **Clarity** | Can implementer follow without ambiguity? Specific file paths? Verification steps? |
-| **Scope** | YAGNI respected? No unnecessary additions? No duplication? |
+### Step 1: Read Target Plan
 
-## Severity Levels
+Read the entire plan document to understand scope.
 
-| Level | Description | Action |
-|-------|-------------|--------|
-| **Critical** | Missing requirements, impossible tasks | Must fix before implementation |
-| **Important** | Unclear steps, missing verification | Should fix before starting |
-| **Minor** | Could be clearer, minor improvements | Note for consideration |
+### Step 2: Create Review Document
 
-## Workflow
-
-### Step 1: Read Target Document
-
-Thoroughly read the plan/design document.
-
-### Step 2: Create Progress File
-
-Create `_plan-review.md`:
+Create `{TARGET_DIR}/_plan-review.md`:
 
 ```markdown
-# Plan Review Progress
+# Plan Review
 
-**Target:** [plan document path]
-**Reference:** [requirements, if any]
+**Target:** {TARGET}
+**Started:** YYYY-MM-DD
+**Status:** In Progress
+**Focus:** Completeness, feasibility, clarity
 
 ## Iteration 1
-- [ ] Review complete
-- Findings: ...
-- Changes applied: ...
+
+### Findings
+
+[To be filled by review agent]
 ```
 
-### Step 3: Iterative Review Loop (Max 4)
+### Step 3: Execute Review Loop
 
-For each iteration:
+For each iteration (max 4):
 
-1. **Review against dimensions**: Completeness, Feasibility, Clarity, Scope
-
-2. **Categorize findings** by severity
-
-3. **Fix Critical/Important issues** in the plan
-
-4. **Update progress file**
-
-5. **Check exit criteria**:
-   - No Critical/Important issues? → Ready for implementation
-   - Otherwise → Next iteration (if < 4)
-
-### Step 4: Final Assessment
-
-Document:
-- Plan readiness for implementation
-- Any caveats or assumptions
-- Remaining Minor issues
-
-## Domain Checklist
-
-- [ ] All requirements mapped to tasks?
-- [ ] Specific file paths included?
-- [ ] Verification steps for each task?
-- [ ] Tasks in logical order?
-- [ ] No scope creep?
-- [ ] Complexity appropriate?
-
-## Example Usage
+**Spawn Review Agent:**
 
 ```
-Target: _tasks/08-feature/02-plan.md
-Reference: _tasks/08-feature/01-task.md
+Task tool (general-purpose):
+  description: "Plan review iteration N"
+  prompt: |
+    You are a Plan Auditor reviewing {TARGET}.
 
-Iteration 1:
-  Findings: [Important] Step 3 missing file paths, [Minor] Could add time estimates
-  Fixed: Added specific paths to Step 3
+    Previous findings (if any): [summary from _plan-review.md]
 
-Iteration 2:
-  Findings: [Minor] Consider adding rollback section
-  Assessment: Ready for implementation
+    Your job is to assess this plan for:
+
+    1. **Completeness**
+       - Are all requirements addressed?
+       - Are there missing tasks?
+       - Are edge cases considered?
+
+    2. **Feasibility**
+       - Are the tasks achievable as described?
+       - Are there hidden complexities?
+       - Are dependencies identified?
+
+    3. **Clarity**
+       - Can an implementer follow this without questions?
+       - Are file paths specific?
+       - Are verification steps included?
+
+    4. **YAGNI/DRY**
+       - Is there unnecessary scope?
+       - Is there duplication between tasks?
+
+    Categorize findings as Critical/Important/Minor.
+    Note any NEW findings not in previous iterations.
+    Assess: Is the review comprehensive or are there areas unexplored?
+```
+
+**Update Review Document:** Append findings to `_plan-review.md`:
+```markdown
+## Iteration N
+
+### New Findings
+- [Critical] ...
+- [Important] ...
+- [Minor] ...
+
+### Refined Analysis
+[Any updates to previous findings]
+
+### Coverage Assessment
+[Areas reviewed / Areas remaining]
+```
+
+**Quality Gate:** Exit when no new findings for 1 iteration (review is comprehensive).
+
+### Step 4: Finalize Review Document
+
+Update `_plan-review.md` with summary:
+
+```markdown
+## Review Summary
+
+**Status:** Ready for User Review
+**Iterations:** N
+**Total Findings:** X Critical, Y Important, Z Minor
+
+### All Findings (Consolidated)
+
+#### Critical
+1. [ ] Finding description - Location/context
+
+#### Important
+1. [ ] Finding description - Location/context
+
+#### Minor
+1. [ ] Finding description - Location/context
+
+### Recommendation
+[Ready for implementation / Needs revisions / Major rework needed]
+```
+
+### Step 5: Present Review for Approval
+
+Inform user:
+
+> **Plan review complete.**
+>
+> Please review `{TARGET_DIR}/_plan-review.md` for findings.
+>
+> After your review, let me know:
+> - Which findings to address
+> - Which to skip (with reason)
+> - Any questions about findings
+
+**STOP and wait for user direction.**
+
+---
+
+## Phase 2: Apply Approved Changes
+
+*Only proceed after user approval.*
+
+### Step 6: Apply Approved Fixes
+
+For each user-approved finding:
+
+1. Update the source plan to address the finding
+2. Check the finding as addressed in `_plan-review.md`: `[x]`
+
+### Step 7: Commit Changes
+
+```bash
+git add {TARGET_DIR}/
+git commit -m "plan: apply review feedback for {PLAN_NAME}
+
+Addressed:
+- [list of addressed findings]"
+```
+
+### Step 8: Final Assessment
+
+Update `_plan-review.md`:
+
+```markdown
+## Resolution
+
+**Addressed:** N findings
+**Skipped:** M findings (user decision)
+**Status:** Complete
+
+### Applied Changes
+- Finding 1: [how resolved]
+- Finding 2: [how resolved]
+
+### Skipped Items
+- Finding X: [user's reason]
+```
+
+---
+
+## Domain-Specific Checklist
+
+Review should verify:
+- [ ] All requirements have corresponding tasks
+- [ ] Tasks have specific file paths
+- [ ] Verification steps are included
+- [ ] Dependencies are in correct order
+- [ ] No scope creep beyond requirements
+- [ ] Complexity is appropriate (not over-engineered)
+
+## Example
+
+```
+User: Review _tasks/20-e2e-testing/02-plan.md
+
+Claude: [Executes Phase 1 - creates _plan-review.md, iterates until comprehensive]
+Claude: Plan review complete. Please review _plan-review.md for findings.
+
+User: Address all Critical and Important. Skip Minor items.
+
+Claude: [Executes Phase 2 - applies approved changes to plan]
 ```
 
 ## Related Skills

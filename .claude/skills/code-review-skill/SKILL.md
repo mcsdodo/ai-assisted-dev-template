@@ -1,48 +1,45 @@
 ---
 name: code-review-skill
-description: Use to review code implementations with iterative quality gates
+description: Use to review code implementations for quality, correctness, and best practices
 ---
 
-# Iterative Code Review
+# Code Review Skill
 
-Review code for quality, correctness, and best practices with up to 4 iterations.
+Two-phase review: First analyze and document findings, then apply approved fixes.
 
-## When to Apply
+**Preset Configuration:**
+- Focus: Code quality, correctness, best practices
+- Quality Gate: No new findings for 1 iteration (review comprehensive)
+- Reviewer Type: Senior Code Reviewer
+- Max Iterations: 4
 
-- After implementing a feature
-- Before creating a PR
-- After significant refactoring
-- When code quality is uncertain
+## When to Use
 
-## Requirements
+- After completing implementation of a feature
+- Before creating a pull request
+- When refactoring significant code
+- Post-merge quality verification
 
-Before starting:
-1. **Target**: File path or git range to review
-2. **Reference**: Plan, spec, or requirements document
+## Required Information
 
-## Quality Gate
+1. **Target** - code path or git range (e.g., `src/auth/login.ts` or `HEAD~3..HEAD`)
+2. **Reference** - plan or spec the code implements
 
-Exit when: **Tests pass + no Critical/Important issues**
+---
 
-## Severity Levels
+## Phase 1: Review (Findings Only)
 
-| Level | Description | Action |
-|-------|-------------|--------|
-| **Critical** | Bugs, security issues, broken functionality | Must fix before proceeding |
-| **Important** | Missing error handling, spec misalignment | Should fix before merge |
-| **Minor** | Style, naming, small improvements | Note for later |
+### Step 1: Gather Code Context
 
-## Workflow
-
-### Step 1: Gather Context
-
+If git range provided:
 ```bash
-# If reviewing git range
-git diff [BASE_SHA]..[HEAD_SHA] --stat
-git log [BASE_SHA]..[HEAD_SHA] --oneline
-
-# Read reference document
+git diff --stat {BASE}..{HEAD}
+git diff {BASE}..{HEAD}
 ```
+
+If file path provided:
+- Read the file(s)
+- Identify recent changes
 
 ### Step 2: Run Tests (Baseline)
 
@@ -50,80 +47,193 @@ git log [BASE_SHA]..[HEAD_SHA] --oneline
 [TEST_COMMAND]
 ```
 
-Tests must pass before review begins.
+Note test status for review context (pass/fail). Do NOT fix yet.
 
-### Step 3: Create Progress File
+### Step 3: Create Review Document
 
-Create `_code-review.md` to track iterations:
+Create `_code-review.md` in project root or task folder:
 
 ```markdown
-# Code Review Progress
+# Code Review
 
-**Target:** [file or git range]
-**Reference:** [plan/spec document]
+**Target:** {TARGET}
+**Reference:** {REFERENCE}
+**Started:** YYYY-MM-DD
+**Status:** In Progress
+**Focus:** Quality, correctness, best practices
+
+**Baseline Test Status:** [Pass / N failures]
 
 ## Iteration 1
-- [ ] Review complete
-- Findings: ...
-- Changes applied: ...
+
+### Findings
+
+[To be filled by review agent]
 ```
 
-### Step 4: Iterative Review Loop (Max 4)
+### Step 4: Execute Review Loop
 
-For each iteration:
+For each iteration (max 4):
 
-1. **Dispatch reviewer**: Use `superpowers:code-reviewer` agent with:
-   - What was implemented
-   - Reference document
-   - Code target (files or git range)
-
-2. **Categorize findings** by severity
-
-3. **Fix Critical/Important issues**
-
-4. **Re-run tests**: `[TEST_COMMAND]`
-
-5. **Update progress file**
-
-6. **Check exit criteria**:
-   - Tests pass AND no Critical/Important issues? → Done
-   - Otherwise → Next iteration (if < 4)
-
-### Step 5: Final Assessment
-
-Document in progress file:
-- Summary of changes made
-- Remaining Minor issues (if any)
-- Readiness for merge
-
-## Domain Checklist
-
-- [ ] Tests pass?
-- [ ] No obvious bugs?
-- [ ] Error handling adequate?
-- [ ] Security considerations addressed?
-- [ ] Matches specification/requirements?
-- [ ] No scope creep beyond requirements?
-- [ ] Follows project patterns (see CLAUDE.md)?
-
-## Example Usage
+**Spawn Review Agent:**
 
 ```
-Target: src/auth/login.ts
-Reference: _tasks/05-auth-feature/02-plan.md
+Task tool (superpowers:code-reviewer):
+  Use template from requesting-code-review/code-reviewer.md
 
-Iteration 1:
-  Findings: [Critical] Missing input validation, [Minor] Inconsistent naming
-  Fixed: Added validation
-  Tests: Pass
+  WHAT_WAS_IMPLEMENTED: {description from reference}
+  PLAN_OR_REQUIREMENTS: {REFERENCE}
+  BASE_SHA: {BASE or N/A}
+  HEAD_SHA: {HEAD or current}
 
-Iteration 2:
-  Findings: [Minor] Could add more specific error messages
-  Assessment: Ready for merge (only Minor issues remain)
+  IMPORTANT: Document findings only. Do not apply fixes.
+```
+
+**Update Review Document:** Append findings to `_code-review.md`:
+```markdown
+## Iteration N
+
+### New Findings
+- [Critical] Issue description - `file:line` - Suggested fix
+- [Important] Issue description - `file:line` - Suggested fix
+- [Minor] Issue description - `file:line` - Suggested fix
+
+### Test Gaps
+[Any missing test coverage noted]
+
+### Coverage Assessment
+[Areas reviewed / Areas remaining]
+```
+
+**Quality Gate:** Exit when no new findings for 1 iteration (review is comprehensive).
+
+### Step 5: Finalize Review Document
+
+Update `_code-review.md` with summary:
+
+```markdown
+## Review Summary
+
+**Status:** Ready for User Review
+**Iterations:** N
+**Total Findings:** X Critical, Y Important, Z Minor
+**Test Status:** [Pass / Fail]
+
+### All Findings (Consolidated)
+
+#### Critical
+1. [ ] Issue - `file:line` - Suggested fix
+
+#### Important
+1. [ ] Issue - `file:line` - Suggested fix
+
+#### Minor
+1. [ ] Issue - `file:line` - Suggested fix
+
+### Test Gaps
+- [ ] Missing test for X
+- [ ] Edge case Y not covered
+
+### Recommendation
+[Ready to merge / Needs fixes / Major issues]
+```
+
+### Step 6: Present Review for Approval
+
+Inform user:
+
+> **Code review complete.**
+>
+> Please review `_code-review.md` for findings.
+>
+> After your review, let me know:
+> - Which findings to fix
+> - Which to skip (with reason)
+> - Any questions about findings
+
+**STOP and wait for user direction.**
+
+---
+
+## Phase 2: Apply Approved Fixes
+
+*Only proceed after user approval.*
+
+### Step 7: Apply Approved Fixes
+
+For each user-approved finding:
+
+1. Implement the fix
+2. Check the finding as addressed in `_code-review.md`: `[x]`
+
+### Step 8: Run Tests
+
+```bash
+[TEST_COMMAND]
+```
+
+If tests fail:
+- Diagnose the failure
+- Fix or report to user for decision
+
+### Step 9: Commit Changes
+
+```bash
+git add -A
+git commit -m "fix: address code review findings
+
+Addressed:
+- [list of fixed issues]"
+```
+
+### Step 10: Final Assessment
+
+Update `_code-review.md`:
+
+```markdown
+## Resolution
+
+**Addressed:** N findings
+**Skipped:** M findings (user decision)
+**Test Status:** All passing
+**Status:** Complete
+
+### Applied Fixes
+- Finding 1: [how resolved]
+- Finding 2: [how resolved]
+
+### Skipped Items
+- Finding X: [user's reason]
+```
+
+---
+
+## Domain-Specific Checklist
+
+Review should verify:
+- [ ] Tests pass
+- [ ] No obvious bugs
+- [ ] Error handling present
+- [ ] No security vulnerabilities (input validation, etc.)
+- [ ] Code matches plan/spec
+- [ ] No scope creep (extra features not requested)
+- [ ] Follows project patterns (see CLAUDE.md)
+
+## Example
+
+```
+User: Review src/auth/login.ts against _tasks/05-auth/02-plan.md
+
+Claude: [Executes Phase 1 - runs tests, creates _code-review.md, iterates until comprehensive]
+Claude: Code review complete. Please review _code-review.md for findings.
+
+User: Fix all Critical issues. Skip the Minor style suggestions.
+
+Claude: [Executes Phase 2 - applies approved fixes, runs tests, commits]
 ```
 
 ## Related Skills
 
 - **plan-review-skill** - Review plans before implementation
 - **test-review-skill** - Review test coverage
-- **verify-skill** - Quick verification checklist
+- **verify-skill** - Quick pre-completion verification

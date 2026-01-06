@@ -3,122 +3,255 @@ name: test-review-skill
 description: Use to review test coverage for completeness and quality
 ---
 
-# Iterative Test Review
+# Test Review Skill
 
-Review test coverage for completeness, edge cases, and quality.
+Two-phase review: First analyze coverage gaps, then add approved tests.
 
-## When to Apply
+**Preset Configuration:**
+- Focus: Test completeness, edge cases, quality
+- Quality Gate: No new gaps found for 1 iteration (review comprehensive)
+- Reviewer Type: Test Coverage Analyst
+- Max Iterations: 4
 
-- After implementing a feature
-- Before release
+## When to Use
+
+- After implementing a feature to verify test coverage
+- Before release to check critical paths are tested
 - When adding tests to existing code
 - Periodic test health checks
 
-## Requirements
+## Required Information
 
-Before starting:
-1. **Target**: Code module/file to analyze
-2. **Reference**: (Optional) Business rules or requirements
+1. **Target** - code module to check coverage for (e.g., `src/calculations.ts`)
+2. **Reference** (optional) - business rules or plan defining what should be tested
 
-## Quality Gate
+---
 
-Exit when: **2 consecutive iterations with no new issues** (convergence)
+## Phase 1: Review (Findings Only)
 
-## Review Focus Areas
+### Step 1: Identify Test Files
 
-| Area | Questions |
-|------|-----------|
-| **Coverage** | All functions tested? All branches covered? |
-| **Edge Cases** | Boundary conditions? Empty inputs? Error paths? |
-| **Quality** | Tests verify real logic (not just mocks)? Independent? Meaningful assertions? |
-| **Business Logic** | Business rules validated? Calculations verified? |
+Find tests for target:
+```bash
+# Find test files matching module name
+find . -name "*test*" -o -name "*spec*" | grep -i [module_name]
 
-## Severity Levels
+# Or check inline tests for languages that support them
+grep -r "describe\|test\|it(" [TARGET_DIR]
+```
 
-| Level | Description | Action |
-|-------|-------------|--------|
-| **Critical** | Untested critical path, missing error handling tests | Must add |
-| **Important** | Missing edge cases, weak assertions | Should add |
-| **Minor** | Could improve test names, minor gaps | Note for later |
-
-## Workflow
-
-### Step 1: Locate Test Files
+### Step 2: Run Tests (Baseline)
 
 ```bash
-# Find tests for the target module
-# Adjust pattern for your project structure
-find . -name "*test*" -o -name "*spec*" | grep -i [module_name]
+[TEST_COMMAND]
 ```
 
-### Step 2: Create Progress File
+Note current test count and status.
 
-Create `_test-review.md`:
+### Step 3: Create Review Document
+
+Create `{TARGET_DIR}/_test-review.md`:
 
 ```markdown
-# Test Review Progress
+# Test Coverage Review
 
-**Target:** [code module path]
-**Reference:** [business rules, if any]
+**Target:** {TARGET}
+**Reference:** {REFERENCE}
+**Started:** YYYY-MM-DD
+**Status:** In Progress
+**Focus:** Completeness, edge cases, test quality
+
+**Baseline:** N tests, [Pass / Fail]
 
 ## Iteration 1
-- [ ] Review complete
-- Findings: ...
-- Tests added: ...
+
+### Findings
+
+[To be filled by review agent]
 ```
 
-### Step 3: Iterative Review Loop (Max 4)
+### Step 4: Execute Review Loop
 
-For each iteration:
+For each iteration (max 4):
 
-1. **Analyze coverage**: Map functions to tests
-
-2. **Identify gaps**: Missing tests, edge cases, error paths
-
-3. **Evaluate quality**: Real logic tested? Independent? Meaningful?
-
-4. **Add/improve tests** for Critical/Important findings
-
-5. **Run tests**: `[TEST_COMMAND]`
-
-6. **Update progress file**
-
-7. **Check convergence**:
-   - 2 iterations with no new issues? → Done
-   - New issues found? → Continue (if < 4)
-
-### Step 4: Final Assessment
-
-Document:
-- Coverage summary
-- Tests added
-- Remaining gaps (if any)
-- Test health assessment
-
-## Domain Checklist
-
-- [ ] Critical business logic has tests?
-- [ ] Edge cases covered (empty, null, boundary)?
-- [ ] Error scenarios tested?
-- [ ] Tests are independent (no order dependency)?
-- [ ] Assertions are meaningful (not just "no error")?
-- [ ] No mock-only tests (testing real behavior)?
-
-## Example Usage
+**Spawn Review Agent:**
 
 ```
-Target: src/calculations.ts
-Reference: docs/business-rules.md
+Task tool (general-purpose):
+  description: "Test review iteration N"
+  prompt: |
+    You are a Test Coverage Analyst reviewing tests for {TARGET}.
 
-Iteration 1:
-  Findings: [Critical] No tests for negative inputs, [Important] Missing boundary test
-  Tests added: testNegativeInput(), testBoundaryValues()
+    Reference (if provided): {REFERENCE}
+    Previous findings (if any): [summary from _test-review.md]
 
-Iteration 2:
-  Findings: [Minor] Could add performance test
-  Convergence: No new Critical/Important
+    Your job:
 
-Assessment: Coverage adequate for release
+    1. **Coverage Analysis**
+       - What functions/methods exist in {TARGET}?
+       - Which have corresponding tests?
+       - Which are missing tests?
+
+    2. **Edge Case Analysis**
+       - Are boundary conditions tested?
+       - Are error paths tested?
+       - Are empty/null inputs tested?
+
+    3. **Test Quality**
+       - Do tests test actual logic (not mocks)?
+       - Are assertions meaningful?
+       - Are tests independent?
+
+    4. **Business Logic**
+       - Are calculation formulas verified?
+       - Are business rules from {REFERENCE} tested?
+
+    Focus on GAPS not on what's already well-tested.
+    We don't want filler tests - only meaningful coverage.
+
+    Categorize findings as Critical/Important/Minor.
+    Note any NEW gaps not in previous iterations.
+```
+
+**Update Review Document:** Append findings to `_test-review.md`:
+```markdown
+## Iteration N
+
+### New Coverage Gaps
+- [Critical] Function X has no tests - handles Y logic
+- [Important] Edge case Z not covered in test_foo
+- [Minor] Could add test for rare path W
+
+### Test Quality Issues
+[Any issues with existing tests]
+
+### Coverage Assessment
+[Areas reviewed / Areas remaining]
+```
+
+**Quality Gate:** Exit when no new gaps found for 1 iteration (review is comprehensive).
+
+### Step 5: Finalize Review Document
+
+Update `_test-review.md` with summary:
+
+```markdown
+## Review Summary
+
+**Status:** Ready for User Review
+**Iterations:** N
+**Total Gaps:** X Critical, Y Important, Z Minor
+
+### All Coverage Gaps (Consolidated)
+
+#### Critical (Missing tests for core logic)
+1. [ ] Gap description - What test to add
+
+#### Important (Edge cases / error paths)
+1. [ ] Gap description - What test to add
+
+#### Minor (Nice to have)
+1. [ ] Gap description - What test to add
+
+### Test Quality Issues
+- [ ] Issue description - Suggested improvement
+
+### Coverage Assessment
+[Sparse / Adequate / Comprehensive]
+```
+
+### Step 6: Present Review for Approval
+
+Inform user:
+
+> **Test coverage review complete.**
+>
+> Please review `{TARGET_DIR}/_test-review.md` for findings.
+>
+> After your review, let me know:
+> - Which tests to add
+> - Which gaps to skip (acceptable risk)
+> - Any questions about coverage
+
+**STOP and wait for user direction.**
+
+---
+
+## Phase 2: Add Approved Tests
+
+*Only proceed after user approval.*
+
+### Step 7: Add Approved Tests
+
+For each user-approved gap:
+
+1. Write the test following TDD principles
+2. Check the gap as addressed in `_test-review.md`: `[x]`
+
+### Step 8: Run Tests
+
+```bash
+[TEST_COMMAND]
+```
+
+Verify:
+- All new tests pass
+- No existing tests broken
+- Test count increased as expected
+
+### Step 9: Commit Changes
+
+```bash
+git add [TEST_FILES]
+git commit -m "test: add coverage for {TARGET}
+
+Added:
+- [list of new tests]"
+```
+
+### Step 10: Final Assessment
+
+Update `_test-review.md`:
+
+```markdown
+## Resolution
+
+**Tests Added:** N
+**Gaps Skipped:** M (user decision)
+**Final Test Count:** X (was Y)
+**Status:** Complete
+
+### Added Tests
+- test_foo: covers [what]
+- test_bar: covers [what]
+
+### Skipped Gaps
+- Gap X: [user's reason - acceptable risk]
+```
+
+---
+
+## Domain-Specific Checklist
+
+Review should verify:
+- [ ] Core business logic has tests
+- [ ] Edge cases covered (empty, null, boundary)
+- [ ] Error paths tested
+- [ ] No tests that only test mocks
+- [ ] Tests are independent (can run in any order)
+- [ ] Tests have meaningful assertions
+
+## Example
+
+```
+User: Review test coverage for src/calculations.ts against DECISIONS.md
+
+Claude: [Executes Phase 1 - analyzes coverage, creates _test-review.md, iterates until comprehensive]
+Claude: Test coverage review complete. Please review _test-review.md for findings.
+
+User: Add Critical and Important tests. Skip Minor - we're time constrained.
+
+Claude: [Executes Phase 2 - adds approved tests, runs tests, commits]
 ```
 
 ## Related Skills
