@@ -35,10 +35,15 @@ These files work out of the box - copy without modification:
 | `.claude/commands/task-plan.md` | `/task-plan` command |
 | `.claude/commands/decision.md` | `/decision` command |
 | `.claude/commands/changelog.md` | `/changelog` command |
+| `.claude/commands/verify.md` | `/verify` command |
 | `.claude/commands/release.md` | `/release` command |
 | `.claude/skills/task-plan-skill/SKILL.md` | Task planning workflow |
 | `.claude/skills/decision-skill/SKILL.md` | Decision recording workflow |
 | `.claude/skills/changelog-skill/SKILL.md` | Changelog update workflow |
+| `.claude/skills/verify-skill/SKILL.md` | Verification before completion |
+| `.claude/skills/code-review-skill/SKILL.md` | Iterative code review (max 4 iterations) |
+| `.claude/skills/plan-review-skill/SKILL.md` | Plan/design review |
+| `.claude/skills/test-review-skill/SKILL.md` | Test coverage review |
 
 ### Examples Only (Reference)
 
@@ -71,6 +76,7 @@ These are for maintaining the template itself - **do not copy to projects**:
 | `/task-plan` | Plan complex features with structured task folders |
 | `/decision` | Record architectural (ADR) or business (BIZ) decisions |
 | `/changelog` | Update changelog immediately after completing work |
+| `/verify` | Run verification checks before marking work complete |
 | `/release` | Bump version, update changelog, commit, tag, push |
 
 ## Links

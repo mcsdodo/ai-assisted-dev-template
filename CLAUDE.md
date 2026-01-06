@@ -226,9 +226,40 @@ This template includes Claude Code slash commands for common workflows:
 | `/task-plan` | Plan a new feature with brainstorming |
 | `/decision` | Record an architectural or business decision |
 | `/changelog` | Update changelog after completing work |
+| `/verify` | Run verification checks before marking work complete |
 | `/release` | Create a new version release |
 
 Commands are defined in `.claude/commands/` with supporting skills in `.claude/skills/`.
+
+## Task Completion Checklist
+
+Before marking any task complete:
+
+- [ ] Tests pass? (run your test command)
+- [ ] Code committed with descriptive message?
+- [ ] `/changelog` run to update [Unreleased]?
+- [ ] Changelog committed?
+
+For significant decisions made during task:
+- [ ] `/decision` run to record ADR/BIZ entry?
+
+## Git Commit Guidelines
+
+**Stage only files from your current session.** Before committing:
+
+1. Run `git status` to see all modified files
+2. Stage only files related to your current task
+3. Do NOT include unrelated files from previous sessions
+
+```bash
+# Good: stage specific files
+git add path/to/changed/file.ext path/to/test.ext
+
+# Avoid: staging everything blindly
+git add -A  # Only use for releases or when ALL changes reviewed
+```
+
+**Exception:** `/release` uses `git add -A` because releases should include all pending changes.
 
 ## File Encoding Standards
 

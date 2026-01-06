@@ -5,6 +5,7 @@ Before using the commands and skills in this template, customize them for your p
 ## Quick Setup Checklist
 
 - [ ] Customize `/release` command for your version files
+- [ ] Customize `/verify` skill test command (if using tests)
 - [ ] Replace `[PLACEHOLDER]` values in `CLAUDE.md`
 - [ ] Verify `_tasks/` folder exists
 - [ ] Delete or keep `_tasks/00-example/` as reference
@@ -130,6 +131,67 @@ After setup, verify everything works:
 2. **Test /decision:** Record a test decision, then delete it
 3. **Test /task-plan:** Create a test task folder, then delete it
 4. **Test /release:** Do a dry run (skip the push step)
+
+## Hooks (Optional)
+
+Claude Code supports hooks that run before/after tool execution. These can enforce workflows automatically.
+
+### Pre-Commit Test Hook
+
+Block commits when tests fail:
+
+```json
+// .claude/settings.json
+{
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "[PATH_TO_YOUR_TEST_SCRIPT]",
+            "timeout": 120000
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+
+### Post-Commit Changelog Reminder
+
+Remind to update changelog after commits:
+
+```json
+{
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "[PATH_TO_YOUR_REMINDER_SCRIPT]",
+            "timeout": 5000
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+
+### Writing Hook Scripts
+
+Hook scripts:
+- Receive JSON via stdin with tool information
+- Return exit code 0 to allow the operation
+- Return exit code 2 to block the operation
+- Should handle errors gracefully (don't block on script failures)
+
+See [Claude Code Hooks Documentation](https://docs.anthropic.com/en/docs/claude-code/hooks) for full details.
 
 ## Next Steps
 
