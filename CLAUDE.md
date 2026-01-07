@@ -2,7 +2,16 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
-> **For agents setting up from template:** `[PLACEHOLDER]` markers indicate values to adapt based on the target project's structure. Analyze the project and replace with appropriate values.
+> **For agents setting up from template:**
+>
+> | Content Type | How to Identify | Action |
+> |--------------|-----------------|--------|
+> | **Placeholders** | `[PLACEHOLDER]` markers like `[PROJECT_DESCRIPTION]`, `[SERVICE_FOLDER]` | Replace with project-specific values |
+> | **Principles** | Sections explaining "why" (Documentation-Driven Development, Locality Principle, Quality Standards) | Keep as guidance - these are best practices |
+> | **Structure examples** | Directory trees, tables with `[FOLDER]` paths | Adapt paths to match actual project structure |
+> | **Optional sections** | File Encoding, detailed Documentation Policy tables | Keep if relevant, trim if overkill for simple projects |
+>
+> **Quick guide:** Principles stay, placeholders get replaced, structure adapts to reality.
 
 ## Core Principle: Documentation-Driven Development
 
