@@ -231,6 +231,17 @@ This template includes Claude Code slash commands for common workflows:
 
 Commands are defined in `.claude/commands/` with supporting skills in `.claude/skills/`.
 
+### Superpowers Integration
+
+**For projects using [Superpowers](https://github.com/codequalitypro/superpowers-marketplace):** The template skills are orchestration layers that work WITH Superpowers, not replacements:
+
+- `task-plan-skill` → Uses `superpowers:brainstorming` + `writing-plans`, adds structured `_tasks/` folders
+- `verify-skill` → Recommends `superpowers:verification-before-completion`, adds changelog/git checks
+- `code-review-skill` → Uses `superpowers:code-reviewer`, adds 2-phase iterative workflow with approval gate
+- `plan-review-skill` / `test-review-skill` → Standalone iterative review workflows with documentation artifacts
+
+**Copy all skills.** They complement Superpowers by adding project-specific structure and iterative quality gates.
+
 ## Task Completion Checklist
 
 Before marking any task complete:

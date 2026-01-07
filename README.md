@@ -24,7 +24,17 @@ These files contain `[PLACEHOLDER]` markers that the agent should replace with p
 
 ### Copy As-Is
 
-These files work out of the box - copy without modification:
+These files work out of the box - copy without modification.
+
+> **Note on Superpowers Integration:** The review/planning skills below are **orchestration layers**, not replacements for Superpowers. They invoke Superpowers skills internally while adding structured workflows. Use both together.
+>
+> | Template Skill | Superpowers Used | What Template Adds |
+> |----------------|------------------|-------------------|
+> | `task-plan-skill` | `brainstorming`, `writing-plans` | Structured `_tasks/{NN}-{name}/` folders with `01-task.md`, `02-plan.md` templates |
+> | `verify-skill` | Recommends `verification-before-completion` | Lightweight checklist + changelog/git status checks |
+> | `code-review-skill` | `code-reviewer` | 2-phase workflow (findings → approval → fixes), `_code-review.md` artifact, max 4 iterations |
+> | `plan-review-skill` | *(standalone)* | Reviews existing plans, `_plan-review.md` artifact, iterative quality gate |
+> | `test-review-skill` | *(standalone)* | Coverage gap analysis, `_test-review.md` artifact, iterative quality gate |
 
 | File | Purpose |
 |------|---------|
