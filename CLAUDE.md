@@ -98,12 +98,17 @@ Project Root
 │   │   ├── task-plan.md
 │   │   ├── decision.md
 │   │   ├── changelog.md
+│   │   ├── verify.md
 │   │   └── release.md
 │   └── skills/                                  # Skills supporting commands
 │       ├── task-plan-skill/SKILL.md
 │       ├── decision-skill/SKILL.md
 │       ├── changelog-skill/SKILL.md
-│       └── release-skill/SKILL.md
+│       ├── verify-skill/SKILL.md
+│       ├── release-skill/SKILL.md
+│       ├── code-review-skill/SKILL.md
+│       ├── plan-review-skill/SKILL.md
+│       └── test-review-skill/SKILL.md
 │
 ├── [SERVICE_FOLDER]/
 │   ├── [service-name]/                          # Service (owns its docs)
@@ -129,8 +134,6 @@ Project Root
 │   │   ├── 02-plan.md                           # Implementation plan
 │   │   └── 03-*.md                              # Additional docs (design, notes, etc.)
 │   └── _TECH_DEBT/                              # Technical debt tracking
-│
-└── .env.example                                 # Environment variables template
 ```
 
 **Key Principle**: Each component/service/directory owns and maintains its own documentation.
