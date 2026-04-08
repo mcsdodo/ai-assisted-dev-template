@@ -108,7 +108,7 @@ Other approaches considered and why they're not recommended.
 1. **Discovery**: Create file, add to README table
 2. **Planning**: Create task in `_tasks/{NN}-{name}/` when ready to fix
 3. **Resolution**: Update Status to "Fixed", link to PR
-4. **Archive**: Run `/move-to-done` to verify the fix and move the file to `_tasks/_TECH_DEBT/_done/`. The skill also updates `README.md` (moves row from "Items" to "Completed Items") and the file's Decision Log.
+4. **Archive**: Invoke `move-to-done-skill` to verify the fix and move the file to `_tasks/_TECH_DEBT/_done/`. The skill also updates `README.md` (moves row from "Items" to "Completed Items") and the file's Decision Log.
 
 See [`.claude/skills/move-to-done-skill/SKILL.md`](../../.claude/skills/move-to-done-skill/SKILL.md) for the archival process.
 

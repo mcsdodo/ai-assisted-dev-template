@@ -121,7 +121,7 @@ After pushing:
 
 ## Customization Required
 
-Before using this skill, customize these placeholders in `.claude/commands/release.md`:
+Before using this skill, customize these placeholders in this file (or follow [`.claude/SETUP.md`](../../SETUP.md) which walks through the release customization):
 
 | Placeholder | Replace With |
 |-------------|--------------|

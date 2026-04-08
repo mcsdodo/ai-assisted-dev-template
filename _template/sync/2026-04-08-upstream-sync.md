@@ -210,6 +210,8 @@ Detailed file-by-file plan will be created next via the `writing-plans` skill.
 - **Files modified (5):** `CLAUDE.md`, `_tasks/CLAUDE.md`, `_tasks/_TECH_DEBT/CLAUDE.md`, `.claude/skills/task-plan-skill/SKILL.md`, `README.md`
 - **Files created (13):** `.claude/settings.json`, `.claude/hooks/post-commit-reminder.sh`, `.claude/skills/updating-docs-skill/SKILL.md`, `.claude/skills/move-to-done-skill/SKILL.md`, `.claude/commands/move-to-done.md`, `.claude/rules/README.md`, `.claude/rules/_example.md`, `_tasks/TASK-STATUS-INDEX.md`, `_tasks/_done/.gitkeep`, `_tasks/_TECH_DEBT/_done/.gitkeep`, plus the CHANGELOG entry
 
+> **Historical note (added after the fact):** The `.claude/commands/move-to-done.md` wrapper listed above was later deleted in the same session (commit `03f26e9`) when the `.claude/commands/` folder was removed entirely — skills can be invoked directly by name without wrappers. See CHANGELOG `[Unreleased]` → Removed.
+
 **Decisions locked in from brainstorming:**
 
 - ✅ 5-section CLAUDE.md structure

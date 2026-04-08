@@ -18,17 +18,7 @@ This skill guides the creation of structured task folders for complex features.
 
 ### Step 1: Brainstorm (Recommended)
 
-If `superpowers:brainstorming` skill is available, invoke it FIRST to:
-- Clarify requirements with the user
-- Explore technical approaches
-- Identify edge cases and constraints
-- Get user approval before proceeding
-
-If the skill is not available, manually discuss with the user:
-- What problem are we solving?
-- What are the requirements and constraints?
-- Are there edge cases to consider?
-- Does the user approve proceeding with this approach?
+If `superpowers:brainstorming` is available, invoke it FIRST to clarify requirements, explore approaches, surface edge cases, and get user approval. If not available, cover the same ground in a manual discussion before proceeding.
 
 ### Step 2: Determine Folder Number
 
@@ -128,15 +118,8 @@ git commit -m "docs: add task and plan for {feature-name}"
 
 This preserves design rationale in version control before code changes begin.
 
-## Key Conventions
-
-- Brainstorm/discuss requirements before planning
-- Plans must include specific file paths
-- Each step needs verification criteria
-- Commit planning docs before coding
-- Superpowers skills are optional but recommended if available
-
 ## Related Skills
 
-- **decision-skill** - Record architectural decisions made during planning
-- **changelog-skill** - Update changelog when task is complete
+- **decision-skill** — Record architectural decisions made during planning
+- **move-to-done-skill** — Verify and archive the task when complete
+- **changelog-skill** — Update changelog when task is complete
