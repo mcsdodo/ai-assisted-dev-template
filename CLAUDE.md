@@ -9,9 +9,15 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 > | **Placeholders** | `[PLACEHOLDER]` markers like `[PROJECT_DESCRIPTION]`, `[SERVICE_FOLDER]` | Replace with project-specific values |
 > | **Principles** | Sections explaining "why" (Documentation-Driven Development, Locality Principle, Quality Standards) | Keep as guidance - these are best practices |
 > | **Structure examples** | Directory trees, tables with `[FOLDER]` paths | Adapt paths to match actual project structure |
-> | **Optional sections** | File Encoding, detailed Documentation Policy tables | Keep if relevant, trim if overkill for simple projects |
+> | **Optional sections** | File Encoding, TDD mandate, detailed Documentation Policy tables | Keep if relevant, trim if overkill for simple projects |
 >
 > **Quick guide:** Principles stay, placeholders get replaced, structure adapts to reality.
+
+---
+
+# 1. BEHAVIOR & RULES
+
+Rules in this section are always active and apply to every task.
 
 ## Core Principle: Documentation-Driven Development
 
@@ -25,15 +31,78 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 **Never skip step 1 or 3!** Documentation must always be read before coding and updated after coding.
 
+## Research Accuracy
+
+When performing research, analyzing documents, or making factual claims, follow these three rules ([source](https://docs.anthropic.com/en/docs/test-and-evaluate/strengthen-guardrails/reduce-hallucinations)):
+
+1. **Say "I don't know" when uncertain.** Do not fill knowledge gaps with plausible-sounding fiction. If you lack sufficient information, state that explicitly rather than guessing.
+2. **Use direct quotes for factual grounding.** When working with documents or web content, extract word-for-word quotes before analyzing or summarizing. This prevents paraphrase-drift where meaning subtly changes during summarization.
+3. **Verify claims with citations.** Every factual claim should have a supporting source. If you cannot find a supporting quote or reference for a claim, retract it rather than presenting it as fact.
+
+**When NOT to apply:** These constraints are for research and factual accuracy. For creative tasks (brainstorming, code generation, architectural design), think freely without citation requirements.
+
+## Test-Driven Development (TDD)
+
+> **OPTIONAL — remove this section if your project doesn't use TDD.**
+
+**MANDATORY for all bug fixes and new features when TDD is adopted.** No production code without a failing test first.
+
+1. **RED** — Write a failing test that demonstrates the desired behavior
+2. **Verify RED** — Run the test, confirm it fails for the right reason (not a typo)
+3. **GREEN** — Write minimal code to make the test pass
+4. **Verify GREEN** — Run the test, confirm it passes along with all existing tests
+5. **REFACTOR** — Clean up if needed, keeping tests green
+
+**Why:** A test written after implementation passes immediately and proves nothing. Test-first forces you to see the failure, proving the test actually catches the bug.
+
+## Path-Scoped Rules
+
+Component-specific rules live in [`.claude/rules/`](.claude/rules/). Claude Code natively auto-loads these files:
+
+- Rules with `paths:` frontmatter load **only** when matching files enter context
+- Rules without `paths:` frontmatter load at session start (like CLAUDE.md but topic-scoped)
+
+See [`.claude/rules/README.md`](.claude/rules/README.md) for how to use this mechanism. Use when CLAUDE.md grows beyond ~200 lines or when rules are tightly scoped to one component.
+
+## Git Commit Guidelines
+
+**Stage only files from your current session.** Before committing:
+
+1. Run `git status` to see all modified files
+2. Stage only files related to your current task
+3. Do NOT include unrelated files from previous sessions
+
+```bash
+# Good: stage specific files
+git add path/to/changed/file.ext path/to/test.ext
+
+# Avoid: staging everything blindly
+git add -A  # Only use for releases or when ALL changes reviewed
+```
+
+**Exception:** `/release` uses `git add -A` because releases should include all pending changes.
+
 ---
+
+# 2. PROJECT CONTEXT
+
+Understand the system before working on it.
 
 ## Project Overview
 
 [PROJECT_DESCRIPTION]
 
+## Architecture
+
+- **Services**: [List your services/components]
+- **Database**: [Your database technology]
+- **Deployment**: [Your deployment target]
+
 ## Documentation Policy
 
 **CRITICAL**: Documentation must be kept in sync with code changes at all times.
+
+**Locality principle**: Documentation lives close to the code it documents. Update local docs first, root docs only if needed. Use the `updating-docs` skill for detailed guidance.
 
 **Example Workflow:**
 ```
@@ -57,102 +126,64 @@ Agent:
 - **Deployment changes** → Update deployment docs (e.g., `[DEPLOYMENT_FOLDER]/README.md`)
 - **Cross-cutting changes** → Update root README.md and CLAUDE.md
 
-**Example**: If you modify a service's CLI commands:
-1. **First**: Update `[SERVICE_FOLDER]/[service-name]/README.md` (local documentation)
-2. **Then**: Update root `README.md` only if it affects overall usage
-3. **Finally**: Update `CLAUDE.md` only if it affects development conventions
-
 **Do NOT** duplicate detailed documentation in multiple places. Instead:
 - Keep **detailed docs** local to the component
 - Keep **high-level overview** in root README.md
 - Use **links** to connect them
 
-### When to Update Documentation
-
-**You MUST update documentation whenever you change code.** Apply the locality principle:
-
-| Change Type | Update First (Local) | Update Second (Root) |
-|-------------|---------------------|---------------------|
-| Service/Component | Service's own README | Root README if architecture changes |
-| Infrastructure | `[INFRASTRUCTURE_FOLDER]/README.md` | CLAUDE.md if workflow changes |
-| Deployment | `[DEPLOYMENT_FOLDER]/README.md` | CLAUDE.md if workflow changes |
-| Testing | Service test docs | Service README if strategy changes |
-| Configuration | Config-specific docs | Root docs if affects setup |
-| Cross-Cutting | Root docs directly | - |
-
-**Exception for CLAUDE.md**: Also update if changes affect agent workflows (new CLI commands, debugging patterns, common operations).
-
-### Documentation Structure and Hierarchy
-
-**Documentation is organized hierarchically by locality:**
-
-```
-Project Root
-├── README.md                                    # High-level overview, architecture, setup
-├── CLAUDE.md                                    # Development conventions, deployment workflow
-├── DECISIONS.md                                 # Architecture and business logic decisions
-├── CHANGELOG.md                                 # Version history (Keep a Changelog format)
-│
-├── .claude/                                     # Claude Code configuration
-│   ├── commands/                                # Slash commands (/task-plan, /decision, etc.)
-│   │   ├── task-plan.md
-│   │   ├── decision.md
-│   │   ├── changelog.md
-│   │   ├── verify.md
-│   │   └── release.md
-│   └── skills/                                  # Skills supporting commands
-│       ├── task-plan-skill/SKILL.md
-│       ├── decision-skill/SKILL.md
-│       ├── changelog-skill/SKILL.md
-│       ├── verify-skill/SKILL.md
-│       ├── release-skill/SKILL.md
-│       ├── code-review-skill/SKILL.md
-│       ├── plan-review-skill/SKILL.md
-│       └── test-review-skill/SKILL.md
-│
-├── [SERVICE_FOLDER]/
-│   ├── [service-name]/                          # Service (owns its docs)
-│   │   ├── README.md                            # Complete service documentation
-│   │   ├── tests/
-│   │   │   └── README.md                        # Service testing docs
-│   │   └── [components]/
-│   │       └── README.md                        # Component specifications
-│   │
-│   └── [another-service]/                       # Another service (owns its docs)
-│       └── README.md                            # Service docs
-│
-├── [INFRASTRUCTURE_FOLDER]/                     # Infrastructure (owns its docs)
-│   └── README.md                                # Infrastructure deployment guide
-│
-├── [DEPLOYMENT_FOLDER]/                         # Deployment (owns its docs)
-│   └── README.md                                # Build and deployment scripts
-│
-├── _tasks/                                      # Task planning folder (AI assistant)
-│   ├── 00-example/                              # Example task folder (delete or keep as reference)
-│   ├── {NN}-{task-name}/                        # Individual task folders
-│   │   ├── 01-task.md                           # Task description and requirements
-│   │   ├── 02-plan.md                           # Implementation plan
-│   │   └── 03-*.md                              # Additional docs (design, notes, etc.)
-│   └── _TECH_DEBT/                              # Technical debt tracking
-```
-
-**Key Principle**: Each component/service/directory owns and maintains its own documentation.
-
-### Documentation Reference Guide for Common Tasks
+### Documentation Reference Guide
 
 **Before you start coding, read the relevant documentation:**
 
-| Task | Read These Docs First | Update After Coding |
-|------|----------------------|---------------------|
+| Task | Read First | Update After |
+|------|-----------|-------------|
 | **Modify service** | `[SERVICE_FOLDER]/[service]/README.md` | Same file |
 | **Add component** | Service README + component README | Both files |
 | **Change infrastructure** | `[INFRASTRUCTURE_FOLDER]/README.md` | Same file + CLAUDE.md if workflow changes |
 | **Modify deployment** | `[DEPLOYMENT_FOLDER]/README.md` | Same file + CLAUDE.md if workflow changes |
 | **Add/modify tests** | Service test README | Same file |
 | **Change config schema** | Relevant service README | Same file + config examples |
-| **Plan complex feature** | `_tasks/CLAUDE.md` | Create `_tasks/{NN}-{name}/` folder |
+| **Plan complex feature** | [`_tasks/CLAUDE.md`](_tasks/CLAUDE.md) | Create `_tasks/{NN}-{name}/` folder |
 
 **Remember**: Always read BEFORE coding, update AFTER coding!
+
+### Documentation Structure and Hierarchy
+
+```
+Project Root
+├── README.md                                    # High-level overview, architecture, setup
+├── CLAUDE.md                                    # Development conventions (this file)
+├── DECISIONS.md                                 # Architecture and business logic decisions
+├── CHANGELOG.md                                 # Version history (Keep a Changelog format)
+│
+├── .claude/                                     # Claude Code configuration
+│   ├── settings.json                            # Permissions + hooks configuration
+│   ├── commands/                                # Slash commands
+│   ├── hooks/                                   # Automation scripts (e.g., post-commit reminder)
+│   ├── rules/                                   # Path-scoped context rules (native feature)
+│   └── skills/                                  # Skills supporting commands
+│
+├── [SERVICE_FOLDER]/
+│   └── [service-name]/                          # Service (owns its docs)
+│       ├── README.md                            # Complete service documentation
+│       └── tests/README.md                      # Service testing docs
+│
+├── [INFRASTRUCTURE_FOLDER]/                     # Infrastructure (owns its docs)
+│   └── README.md
+│
+├── [DEPLOYMENT_FOLDER]/                         # Deployment (owns its docs)
+│   └── README.md
+│
+└── _tasks/                                      # Task planning folder
+    ├── TASK-STATUS-INDEX.md                     # Central task dashboard
+    ├── CLAUDE.md                                # Task conventions
+    ├── {NN}-{task-name}/                        # Active task folders
+    ├── _done/                                   # Archived completed tasks
+    └── _TECH_DEBT/                              # Technical debt tracking
+        └── _done/                               # Archived fixed tech debt
+```
+
+**Key Principle**: Each component/service/directory owns and maintains its own documentation.
 
 ### Documentation Quality Standards
 
@@ -164,37 +195,17 @@ Project Root
 6. **Consistency**: Follow the existing documentation style and structure
 7. **Context**: Explain the "why" not just the "what"
 
-### Documentation Update Checklist
+---
 
-When implementing a change, follow the **locality principle** and use this checklist:
+# 3. WORKFLOWS
 
-**Step 1: Update Local Documentation (where the change was made)**
-- [ ] Updated service-specific README if service code changed
-- [ ] Updated infrastructure docs if infrastructure changed
-- [ ] Updated deployment docs if deployment scripts changed
-- [ ] Updated test docs if tests changed
-- [ ] Updated configuration examples if config schema changed
-- [ ] Added/updated code examples and CLI usage in local docs
-
-**Step 2: Update Root Documentation (only if needed)**
-- [ ] Updated root `README.md` ONLY if:
-  - Architecture overview changed
-  - User-facing setup/usage changed
-  - New service added/removed
-- [ ] Updated root `CLAUDE.md` ONLY if:
-  - Development conventions changed
-  - Deployment workflow changed
-
-**Step 3: Verify Documentation Quality**
-- [ ] Verified all markdown links are valid and point to existing files
-- [ ] Ensured no duplication between local and root docs (use links instead)
-- [ ] Confirmed examples are accurate and tested
-
-**Remember: Local First, Root Second!**
+How to perform common tasks.
 
 ## Task Planning Folder (`_tasks/`)
 
-Complex features and multi-session work go in `_tasks/`. See [`_tasks/CLAUDE.md`](_tasks/CLAUDE.md) for detailed conventions (folder structure, file naming, lifecycle).
+Complex features and multi-session work go in `_tasks/`. See [`_tasks/CLAUDE.md`](_tasks/CLAUDE.md) for detailed conventions (folder structure, file naming, lifecycle, `_done/` archival).
+
+The central dashboard for task status is [`_tasks/TASK-STATUS-INDEX.md`](_tasks/TASK-STATUS-INDEX.md). New tasks get registered there by `task-plan-skill`; completed tasks get archived to `_done/` via `move-to-done-skill`.
 
 See [`_tasks/00-example/`](_tasks/00-example/) for a sample task folder showing the pattern.
 
@@ -222,6 +233,8 @@ Update [`CHANGELOG.md`](CHANGELOG.md) **immediately** after completing work. Don
 2. Add entry under `[Unreleased]` in the appropriate category (Added, Changed, Fixed, Removed)
 3. Commit changelog update with the code changes
 
+A post-commit hook ([`.claude/hooks/post-commit-reminder.sh`](.claude/hooks/post-commit-reminder.sh)) reminds the agent to run `/changelog` after every git commit that doesn't already touch CHANGELOG.
+
 **Writing tips:**
 - Be concise (one line per change)
 - Focus on user-visible impact, not implementation details
@@ -240,6 +253,7 @@ This template includes Claude Code slash commands for common workflows:
 | `/changelog` | Update changelog after completing work |
 | `/verify` | Run verification checks before marking work complete |
 | `/release` | Create a new version release |
+| `/move-to-done` | Verify a completed task and archive it to `_done/` |
 
 Commands are defined in `.claude/commands/` with supporting skills in `.claude/skills/`.
 
@@ -251,6 +265,7 @@ Commands are defined in `.claude/commands/` with supporting skills in `.claude/s
 - `verify-skill` → Recommends `superpowers:verification-before-completion`, adds changelog/git checks
 - `code-review-skill` → Uses `superpowers:code-reviewer`, adds 2-phase iterative workflow with approval gate
 - `plan-review-skill` / `test-review-skill` → Standalone iterative review workflows with documentation artifacts
+- `updating-docs-skill` / `move-to-done-skill` → Project-specific lifecycle skills with no direct Superpowers equivalent
 
 **Copy all skills.** They complement Superpowers by adding project-specific structure and iterative quality gates.
 
@@ -262,27 +277,19 @@ Before marking any task complete:
 - [ ] Code committed with descriptive message?
 - [ ] `/changelog` run to update [Unreleased]?
 - [ ] Changelog committed?
+- [ ] Local docs updated? (use `updating-docs` skill if unsure which)
 
 For significant decisions made during task:
 - [ ] `/decision` run to record ADR/BIZ entry?
 
-## Git Commit Guidelines
+For completed tasks in `_tasks/{NN}-name/`:
+- [ ] `/move-to-done` run to archive to `_done/` and update `TASK-STATUS-INDEX.md`?
 
-**Stage only files from your current session.** Before committing:
+---
 
-1. Run `git status` to see all modified files
-2. Stage only files related to your current task
-3. Do NOT include unrelated files from previous sessions
+# 4. ENVIRONMENT & TOOLING
 
-```bash
-# Good: stage specific files
-git add path/to/changed/file.ext path/to/test.ext
-
-# Avoid: staging everything blindly
-git add -A  # Only use for releases or when ALL changes reviewed
-```
-
-**Exception:** `/release` uses `git add -A` because releases should include all pending changes.
+Consult these sections when relevant to your current task.
 
 ## File Encoding Standards
 
@@ -298,11 +305,15 @@ This is especially critical for:
 - Dockerfiles
 - Any file executed in containers
 
-## Architecture
+## OS-Specific Notes
 
-- **Services**: [List your services/components]
-- **Database**: [Your database technology]
-- **Deployment**: [Your deployment target]
+[Add any OS-specific development notes here, e.g., Windows Git Bash path conversion, WSL gotchas, PowerShell quirks. Remove this section if not applicable.]
+
+---
+
+# 5. TECHNICAL REFERENCE
+
+Look up these sections as needed when working with specific services or infrastructure.
 
 ## Common Development Commands
 

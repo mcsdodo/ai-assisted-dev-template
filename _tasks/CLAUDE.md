@@ -6,15 +6,19 @@ This folder contains planning documents for complex features. All plans, designs
 
 ```
 _tasks/
-├── {NN}-{descriptive-name}/          # Numbered folders (check existing for next NN)
+├── TASK-STATUS-INDEX.md              # Central dashboard (all tasks + change log)
+├── CLAUDE.md                         # This file — task conventions
+├── {NN}-{descriptive-name}/          # Active numbered task folders
 │   ├── 01-task.md                    # Task description, requirements
 │   ├── 02-plan.md                    # Implementation plan
 │   ├── 02-design.md                  # Or design doc (alternative to plan)
 │   └── 03-*.md                       # Additional docs as needed
-├── _TECH_DEBT/                       # Tech debt tracking (see _TECH_DEBT/CLAUDE.md)
-│   ├── {NN}-{issue-name}.md          # Individual tech debt items
-│   └── CLAUDE.md                     # Tech debt guidelines
-└── CLAUDE.md                         # This file
+├── _done/                            # Archived completed tasks (retain original NN)
+│   └── {NN}-{descriptive-name}/
+└── _TECH_DEBT/                       # Tech debt tracking (see _TECH_DEBT/CLAUDE.md)
+    ├── {NN}-{issue-name}.md          # Individual tech debt items
+    ├── _done/                        # Archived fixed tech debt
+    └── CLAUDE.md                     # Tech debt guidelines
 ```
 
 ## File Naming
@@ -24,14 +28,20 @@ _tasks/
 
 ### Finding the Next Folder Number
 
-List existing folders and use the next number:
-```bash
-ls _tasks/
-# Shows: 00-example, 01-auth-feature, 02-api-refactor
-# → Use 03 for your new folder
+**CRITICAL — check BOTH locations (items move to `_done/` when archived but retain their numbers):**
+
+```
+Glob(pattern: "[0-9][0-9]-*", path: "_tasks")
+Glob(pattern: "[0-9][0-9]-*", path: "_tasks/_done")
 ```
 
-If no numbered folders exist (only `00-example`), start with `01`.
+Extract the highest folder number from BOTH results, add 1, zero-pad to 2 digits.
+
+**Do NOT:**
+- Use `ls _tasks/` alone — it misses `_done/` and can cause NN collisions
+- Guess folder numbers without checking
+
+If no numbered folders exist anywhere (only `00-example`), start with `01`.
 
 | File | Purpose |
 |------|---------|
@@ -65,10 +75,13 @@ Always include metadata at top:
 
 ## Task Lifecycle
 
-1. **Planning**: Create `{NN}-{name}/01-task.md` with requirements
+1. **Planning**: Create `{NN}-{name}/01-task.md` with requirements — `task-plan-skill` also registers the task in `TASK-STATUS-INDEX.md`
 2. **Design**: Add `02-plan.md` or `02-design.md`
 3. **Implementation**: Reference plan during coding
-4. **Completion**: Keep for historical reference
+4. **Completion**: Run `/verify` before declaring complete
+5. **Archival**: Run `/move-to-done` to verify implementation against plan, move the folder to `_tasks/_done/`, and update `TASK-STATUS-INDEX.md` with a Change Log entry
+
+See [`.claude/skills/move-to-done-skill/SKILL.md`](../.claude/skills/move-to-done-skill/SKILL.md) for the full archival process.
 
 ## Tech Debt Integration
 

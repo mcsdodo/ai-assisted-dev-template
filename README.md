@@ -40,13 +40,21 @@ These files work out of the box - copy without modification.
 |------|---------|
 | `CHANGELOG.md` | Version history ([Keep a Changelog](https://keepachangelog.com/) format) |
 | `DECISIONS.md` | Decision log (ADR/BIZ format) |
-| `_tasks/CLAUDE.md` | Task planning conventions |
+| `_tasks/CLAUDE.md` | Task planning conventions (with `_done/` archive) |
+| `_tasks/TASK-STATUS-INDEX.md` | Central task status dashboard |
+| `_tasks/_done/.gitkeep` | Archive folder for completed tasks |
 | `_tasks/_TECH_DEBT/CLAUDE.md` | Tech debt documentation guidelines |
+| `_tasks/_TECH_DEBT/_done/.gitkeep` | Archive folder for fixed tech debt |
+| `.claude/settings.json` | Permissions allowlist + hooks configuration |
+| `.claude/hooks/post-commit-reminder.sh` | Post-commit changelog reminder hook |
+| `.claude/rules/README.md` | Path-scoped rules explainer (native Claude Code feature) |
+| `.claude/rules/_example.md` | Example path-scoped rule file |
 | `.claude/commands/task-plan.md` | `/task-plan` command |
 | `.claude/commands/decision.md` | `/decision` command |
 | `.claude/commands/changelog.md` | `/changelog` command |
 | `.claude/commands/verify.md` | `/verify` command |
 | `.claude/commands/release.md` | `/release` command |
+| `.claude/commands/move-to-done.md` | `/move-to-done` command |
 | `.claude/skills/task-plan-skill/SKILL.md` | Task planning workflow |
 | `.claude/skills/decision-skill/SKILL.md` | Decision recording workflow |
 | `.claude/skills/changelog-skill/SKILL.md` | Changelog update workflow |
@@ -54,6 +62,8 @@ These files work out of the box - copy without modification.
 | `.claude/skills/code-review-skill/SKILL.md` | Iterative code review (max 4 iterations) |
 | `.claude/skills/plan-review-skill/SKILL.md` | Plan/design review |
 | `.claude/skills/test-review-skill/SKILL.md` | Test coverage review |
+| `.claude/skills/updating-docs-skill/SKILL.md` | Documentation update workflow (locality principle) |
+| `.claude/skills/move-to-done-skill/SKILL.md` | Verify-and-archive completed tasks/tech-debt |
 
 ### Examples Only (Reference)
 
@@ -88,6 +98,7 @@ These are for maintaining the template itself - **do not copy to projects**:
 | `/changelog` | Update changelog immediately after completing work |
 | `/verify` | Run verification checks before marking work complete |
 | `/release` | Bump version, update changelog, commit, tag, push |
+| `/move-to-done` | Verify a completed task and archive it to `_done/` |
 
 ## Links
 

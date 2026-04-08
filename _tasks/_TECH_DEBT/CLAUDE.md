@@ -7,10 +7,12 @@ This folder tracks technical debt items discovered during development.
 Each tech debt item gets its own numbered markdown file:
 
 ```
-_TECH_DEBT/
+_tasks/_TECH_DEBT/
 ├── CLAUDE.md                              # This file
 ├── README.md                              # Index with summary table
-└── {NN}-{descriptive-name}.md             # Individual tech debt items (numbered)
+├── {NN}-{descriptive-name}.md             # Active tech debt items (numbered)
+└── _done/                                 # Archived fixed items (retain original NN)
+    └── {NN}-{descriptive-name}.md
 ```
 
 ## File Naming
@@ -20,7 +22,14 @@ Use sequential numbering like `_tasks/`:
 - `02-second-issue.md`
 - `03-third-issue.md`
 
-Check existing files to determine the next number.
+**CRITICAL — check BOTH locations when finding the next number** (items move to `_done/` but retain their numbers):
+
+```
+Glob(pattern: "[0-9][0-9]-*.md", path: "_tasks/_TECH_DEBT")
+Glob(pattern: "[0-9][0-9]-*.md", path: "_tasks/_TECH_DEBT/_done")
+```
+
+Extract the highest file number from BOTH results, add 1, zero-pad to 2 digits.
 
 ## File Template
 
@@ -99,7 +108,9 @@ Other approaches considered and why they're not recommended.
 1. **Discovery**: Create file, add to README table
 2. **Planning**: Create task in `_tasks/{NN}-{name}/` when ready to fix
 3. **Resolution**: Update Status to "Fixed", link to PR
-4. **Archive**: Keep file for historical reference
+4. **Archive**: Run `/move-to-done` to verify the fix and move the file to `_tasks/_TECH_DEBT/_done/`. The skill also updates `README.md` (moves row from "Items" to "Completed Items") and the file's Decision Log.
+
+See [`.claude/skills/move-to-done-skill/SKILL.md`](../../.claude/skills/move-to-done-skill/SKILL.md) for the archival process.
 
 ## Decision Log Guidelines
 

@@ -32,12 +32,14 @@ If the skill is not available, manually discuss with the user:
 
 ### Step 2: Determine Folder Number
 
-Check existing `_tasks/` directories:
-```bash
-ls _tasks/
+**CRITICAL — check BOTH `_tasks/` and `_tasks/_done/`** (archived tasks retain their numbers, so next number must not collide):
+
+```
+Glob(pattern: "[0-9][0-9]-*", path: "_tasks")
+Glob(pattern: "[0-9][0-9]-*", path: "_tasks/_done")
 ```
 
-Use the next sequential number (e.g., if `15-feature` exists, use `16`).
+Extract the highest folder number from BOTH results, add 1, zero-pad to 2 digits. Do NOT use `ls _tasks/` alone — it misses `_done/` and can cause NN collisions.
 
 ### Step 3: Create Task File
 
@@ -103,12 +105,24 @@ If available, use `superpowers:writing-plans` skill to develop the plan. Create 
 - [ ] Documentation updated
 ```
 
-### Step 5: Commit Before Implementation
+### Step 5: Register Task in TASK-STATUS-INDEX.md
+
+Add a row to the Quick Reference Table in [`_tasks/TASK-STATUS-INDEX.md`](../../../_tasks/TASK-STATUS-INDEX.md):
+
+```markdown
+| `{NN}-{feature-name}` | Planning | 📝 Planning | None |
+```
+
+Also increment the `📝 Planning` count in the Summary Statistics table.
+
+This keeps the central dashboard in sync with actual task state. The `move-to-done-skill` will update this row again when the task is archived.
+
+### Step 6: Commit Before Implementation
 
 **CRITICAL**: Commit planning docs BEFORE starting implementation:
 
 ```bash
-git add _tasks/{NN}-{feature-name}/
+git add _tasks/{NN}-{feature-name}/ _tasks/TASK-STATUS-INDEX.md
 git commit -m "docs: add task and plan for {feature-name}"
 ```
 
