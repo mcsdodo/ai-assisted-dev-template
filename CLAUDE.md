@@ -80,7 +80,7 @@ git add path/to/changed/file.ext path/to/test.ext
 git add -A  # Only use for releases or when ALL changes reviewed
 ```
 
-**Exception:** `/release` uses `git add -A` because releases should include all pending changes.
+**Exception:** `release-skill` uses `git add -A` because releases should include all pending changes.
 
 ---
 
@@ -158,10 +158,9 @@ Project Root
 │
 ├── .claude/                                     # Claude Code configuration
 │   ├── settings.json                            # Permissions + hooks configuration
-│   ├── commands/                                # Slash commands
 │   ├── hooks/                                   # Automation scripts (e.g., post-commit reminder)
 │   ├── rules/                                   # Path-scoped context rules (native feature)
-│   └── skills/                                  # Skills supporting commands
+│   └── skills/                                  # Invokable skills (workflows + commands)
 │
 ├── [SERVICE_FOLDER]/
 │   └── [service-name]/                          # Service (owns its docs)
@@ -222,7 +221,7 @@ Record architectural (ADR) and business logic (BIZ) decisions in [`DECISIONS.md`
 
 **Key principle:** Focus on the "why" - reasoning is the most valuable part of a decision record.
 
-Use `/decision` command or invoke the decision skill.
+Invoke `decision-skill` to record a new entry.
 
 ## Changelog (`CHANGELOG.md`)
 
@@ -233,29 +232,34 @@ Update [`CHANGELOG.md`](CHANGELOG.md) **immediately** after completing work. Don
 2. Add entry under `[Unreleased]` in the appropriate category (Added, Changed, Fixed, Removed)
 3. Commit changelog update with the code changes
 
-A post-commit hook ([`.claude/hooks/post-commit-reminder.sh`](.claude/hooks/post-commit-reminder.sh)) reminds the agent to run `/changelog` after every git commit that doesn't already touch CHANGELOG.
+A post-commit hook ([`.claude/hooks/post-commit-reminder.sh`](.claude/hooks/post-commit-reminder.sh)) reminds the agent to invoke `changelog-skill` after every git commit that doesn't already touch CHANGELOG.
 
 **Writing tips:**
 - Be concise (one line per change)
 - Focus on user-visible impact, not implementation details
 - Use consistent terminology
 
-Use `/changelog` command or invoke the changelog skill.
+Invoke `changelog-skill` to add an entry.
 
-## Slash Commands
+## Skills
 
-This template includes Claude Code slash commands for common workflows:
+This template includes Claude Code skills for common workflows. Invoke by name (e.g., `changelog-skill`) or let natural-language requests trigger auto-activation via their descriptions.
 
-| Command | Purpose |
-|---------|---------|
-| `/task-plan` | Plan a new feature with brainstorming |
-| `/decision` | Record an architectural or business decision |
-| `/changelog` | Update changelog after completing work |
-| `/verify` | Run verification checks before marking work complete |
-| `/release` | Create a new version release |
-| `/move-to-done` | Verify a completed task and archive it to `_done/` |
+| Skill | Purpose |
+|-------|---------|
+| `task-plan-skill` | Plan a new feature with brainstorming + structured folders |
+| `decision-skill` | Record an architectural or business decision |
+| `changelog-skill` | Update changelog after completing work |
+| `verify-skill` | Run verification checks before marking work complete |
+| `release-skill` | Bump version, update changelog, commit, tag, push |
+| `move-to-done-skill` | Verify a completed task and archive it to `_done/` |
+| `updating-docs-skill` | Which docs to update after code changes (locality principle) |
+| `code-review-skill` | Iterative code review (max 4 iterations, 2-phase approval) |
+| `plan-review-skill` | Review plans/designs before implementation |
+| `test-review-skill` | Review test coverage for gaps |
+| `upstream-sync-skill` | Learn from a descendant project and sync refinements back |
 
-Commands are defined in `.claude/commands/` with supporting skills in `.claude/skills/`.
+Skills live in `.claude/skills/`.
 
 ### Superpowers Integration
 
@@ -275,15 +279,15 @@ Before marking any task complete:
 
 - [ ] Tests pass? (run your test command)
 - [ ] Code committed with descriptive message?
-- [ ] `/changelog` run to update [Unreleased]?
+- [ ] `changelog-skill` run to update [Unreleased]?
 - [ ] Changelog committed?
-- [ ] Local docs updated? (use `updating-docs` skill if unsure which)
+- [ ] Local docs updated? (use `updating-docs-skill` if unsure which)
 
 For significant decisions made during task:
-- [ ] `/decision` run to record ADR/BIZ entry?
+- [ ] `decision-skill` run to record ADR/BIZ entry?
 
 For completed tasks in `_tasks/{NN}-name/`:
-- [ ] `/move-to-done` run to archive to `_done/` and update `TASK-STATUS-INDEX.md`?
+- [ ] `move-to-done-skill` run to archive to `_done/` and update `TASK-STATUS-INDEX.md`?
 
 ---
 

@@ -49,21 +49,17 @@ These files work out of the box - copy without modification.
 | `.claude/hooks/post-commit-reminder.sh` | Post-commit changelog reminder hook |
 | `.claude/rules/README.md` | Path-scoped rules explainer (native Claude Code feature) |
 | `.claude/rules/_example.md` | Example path-scoped rule file |
-| `.claude/commands/task-plan.md` | `/task-plan` command |
-| `.claude/commands/decision.md` | `/decision` command |
-| `.claude/commands/changelog.md` | `/changelog` command |
-| `.claude/commands/verify.md` | `/verify` command |
-| `.claude/commands/release.md` | `/release` command |
-| `.claude/commands/move-to-done.md` | `/move-to-done` command |
 | `.claude/skills/task-plan-skill/SKILL.md` | Task planning workflow |
 | `.claude/skills/decision-skill/SKILL.md` | Decision recording workflow |
 | `.claude/skills/changelog-skill/SKILL.md` | Changelog update workflow |
 | `.claude/skills/verify-skill/SKILL.md` | Verification before completion |
+| `.claude/skills/release-skill/SKILL.md` | Release workflow (bump, commit, tag, push) |
 | `.claude/skills/code-review-skill/SKILL.md` | Iterative code review (max 4 iterations) |
 | `.claude/skills/plan-review-skill/SKILL.md` | Plan/design review |
 | `.claude/skills/test-review-skill/SKILL.md` | Test coverage review |
 | `.claude/skills/updating-docs-skill/SKILL.md` | Documentation update workflow (locality principle) |
 | `.claude/skills/move-to-done-skill/SKILL.md` | Verify-and-archive completed tasks/tech-debt |
+| `.claude/skills/upstream-sync-skill/SKILL.md` | Learn from a descendant project and sync refinements back |
 
 ### Examples Only (Reference)
 
@@ -89,16 +85,21 @@ These are for maintaining the template itself - **do not copy to projects**:
 - **Locality Principle**: Docs live close to the code they describe
 - **Task Planning**: Complex features get `_tasks/{NN}-{name}/` folders
 
-## Slash Commands
+## Skills
 
-| Command | Purpose |
-|---------|---------|
-| `/task-plan` | Plan complex features with structured task folders |
-| `/decision` | Record architectural (ADR) or business (BIZ) decisions |
-| `/changelog` | Update changelog immediately after completing work |
-| `/verify` | Run verification checks before marking work complete |
-| `/release` | Bump version, update changelog, commit, tag, push |
-| `/move-to-done` | Verify a completed task and archive it to `_done/` |
+Invoke by skill name (e.g., `changelog-skill`) or let natural-language requests trigger auto-activation via their descriptions.
+
+| Skill | Purpose |
+|-------|---------|
+| `task-plan-skill` | Plan complex features with structured task folders |
+| `decision-skill` | Record architectural (ADR) or business (BIZ) decisions |
+| `changelog-skill` | Update changelog immediately after completing work |
+| `verify-skill` | Run verification checks before marking work complete |
+| `release-skill` | Bump version, update changelog, commit, tag, push |
+| `move-to-done-skill` | Verify a completed task and archive it to `_done/` |
+| `updating-docs-skill` | Which docs to update after code changes (locality principle) |
+| `code-review-skill` / `plan-review-skill` / `test-review-skill` | Iterative reviews with 2-phase approval |
+| `upstream-sync-skill` | Learn from a descendant project and sync refinements back |
 
 ## Links
 

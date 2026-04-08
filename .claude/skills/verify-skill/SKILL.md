@@ -42,7 +42,7 @@ Verify:
 
 If project uses `CHANGELOG.md`:
 - Check that `[Unreleased]` section includes an entry for this work
-- If missing, run `/changelog` first
+- If missing, invoke `changelog-skill` first
 
 ### Step 4: Review Constraints
 

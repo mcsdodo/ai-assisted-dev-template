@@ -19,5 +19,5 @@ if echo "$input" | grep -qi '"command"[^}]*CHANGELOG'; then
 fi
 
 # Exit code 2 with stderr output = blocking reminder shown to the agent
-echo "REMINDER: Run /changelog to update CHANGELOG.md [Unreleased]" >&2
+echo "REMINDER: Invoke changelog-skill to update CHANGELOG.md [Unreleased]" >&2
 exit 2

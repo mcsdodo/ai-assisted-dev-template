@@ -111,7 +111,7 @@ git commit -m "feat: [description]"
 
 ## Integration with Release
 
-When running `/release`:
+When invoking `release-skill`:
 1. The `[Unreleased]` section becomes a versioned section
 2. A new empty `[Unreleased]` section is created
 3. The release workflow handles the transformation

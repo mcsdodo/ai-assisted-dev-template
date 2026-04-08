@@ -23,17 +23,15 @@ Patterns are refined through real-world usage, then synced back here:
 Upstream Project (battle-tested) → Sync Analysis → Template (abstracted)
 ```
 
-See [`workflows/upstream-sync.md`](workflows/upstream-sync.md) for the sync process.
+The sync process is automated by [`upstream-sync-skill`](../.claude/skills/upstream-sync-skill/SKILL.md). Historical analyses live in [`sync/`](sync/).
 
 ## Folder Structure
 
 ```
 _template/
 ├── CLAUDE.md           # This file
-├── sync/               # Historical sync analyses
-│   └── YYYY-MM-DD-*.md # Dated analysis documents
-└── workflows/          # Template maintenance workflows
-    └── upstream-sync.md
+└── sync/               # Historical sync analyses
+    └── YYYY-MM-DD-upstream-sync.md
 ```
 
 ## Key Principles

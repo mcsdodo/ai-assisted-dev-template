@@ -78,8 +78,8 @@ Always include metadata at top:
 1. **Planning**: Create `{NN}-{name}/01-task.md` with requirements — `task-plan-skill` also registers the task in `TASK-STATUS-INDEX.md`
 2. **Design**: Add `02-plan.md` or `02-design.md`
 3. **Implementation**: Reference plan during coding
-4. **Completion**: Run `/verify` before declaring complete
-5. **Archival**: Run `/move-to-done` to verify implementation against plan, move the folder to `_tasks/_done/`, and update `TASK-STATUS-INDEX.md` with a Change Log entry
+4. **Completion**: Use `verify-skill` before declaring complete
+5. **Archival**: Use `move-to-done-skill` to verify implementation against plan, move the folder to `_tasks/_done/`, and update `TASK-STATUS-INDEX.md` with a Change Log entry
 
 See [`.claude/skills/move-to-done-skill/SKILL.md`](../.claude/skills/move-to-done-skill/SKILL.md) for the full archival process.
 

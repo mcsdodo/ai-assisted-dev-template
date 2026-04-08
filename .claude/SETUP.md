@@ -1,18 +1,18 @@
 # Setup and Customization
 
-Before using the commands and skills in this template, customize them for your project.
+Before using the skills in this template, customize them for your project.
 
 ## Quick Setup Checklist
 
-- [ ] Customize `/release` command for your version files
-- [ ] Customize `/verify` skill test command (if using tests)
+- [ ] Customize `release-skill` for your version files
+- [ ] Customize `verify-skill` test command (if using tests)
 - [ ] Replace `[PLACEHOLDER]` values in `CLAUDE.md`
 - [ ] Verify `_tasks/` folder exists
 - [ ] Delete or keep `_tasks/00-example/` as reference
 
 ## Release Skill Customization
 
-The `/release` command needs to know where your version files are.
+The `release-skill` needs to know where your version files are.
 
 ### Step 1: Identify Your Version Files
 
@@ -114,9 +114,13 @@ Ensure these folders exist:
 ```
 your-project/
 ├── _tasks/                    # Task planning (required)
+│   ├── _done/                # Archived completed tasks
 │   └── _TECH_DEBT/           # Tech debt tracking
+│       └── _done/            # Archived fixed tech debt
 ├── .claude/
-│   ├── commands/             # Slash commands
+│   ├── settings.json         # Permissions + hooks config
+│   ├── hooks/                # Automation scripts
+│   ├── rules/                # Path-scoped context rules
 │   └── skills/               # Skill implementations
 ├── CLAUDE.md                 # AI guidance
 ├── DECISIONS.md              # Decision log
@@ -127,10 +131,10 @@ your-project/
 
 After setup, verify everything works:
 
-1. **Test /changelog:** Make a small change and run `/changelog`
-2. **Test /decision:** Record a test decision, then delete it
-3. **Test /task-plan:** Create a test task folder, then delete it
-4. **Test /release:** Do a dry run (skip the push step)
+1. **Test `changelog-skill`:** Make a small change and invoke the skill
+2. **Test `decision-skill`:** Record a test decision, then delete it
+3. **Test `task-plan-skill`:** Create a test task folder, then delete it
+4. **Test `release-skill`:** Do a dry run (skip the push step)
 
 ## Hooks (Optional)
 
